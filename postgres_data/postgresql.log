@@ -1,0 +1,109 @@
+2026-08-22 19:43:59.637 +04 [34080] LOG:  starting PostgreSQL 16.15 (Postgres.app) on aarch64-apple-darwin21.6.0, compiled by Apple clang version 14.0.0 (clang-1400.0.29.102), 64-bit
+2026-08-22 19:43:59.639 +04 [34080] LOG:  listening on IPv6 address "::1", port 5432
+2026-08-22 19:43:59.639 +04 [34080] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-08-22 19:43:59.639 +04 [34080] FATAL:  could not open lock file "/tmp/.s.PGSQL.5432.lock": Permission denied
+2026-08-22 19:43:59.639 +04 [34080] LOG:  database system is shut down
+2026-08-22 19:45:56.844 +04 [34148] LOG:  starting PostgreSQL 16.15 (Postgres.app) on aarch64-apple-darwin21.6.0, compiled by Apple clang version 14.0.0 (clang-1400.0.29.102), 64-bit
+2026-08-22 19:45:56.848 +04 [34148] LOG:  listening on IPv6 address "::1", port 5432
+2026-08-22 19:45:56.848 +04 [34148] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-08-22 19:45:56.848 +04 [34148] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2026-08-22 19:45:56.853 +04 [34151] LOG:  database system was shut down at 2026-08-22 19:43:59 +04
+2026-08-22 19:45:56.857 +04 [34148] LOG:  database system is ready to accept connections
+2026-08-22 19:45:57.026 +04 [34155] FATAL:  role "alexandrprohnitskii" does not exist
+2026-08-22 19:45:59.337 +04 [34161] FATAL:  role "alexandrprohnitskii" does not exist
+2026-08-22 19:47:48.203 +04 [34195] FATAL:  role "alexandrprohnitskii" does not exist
+2026-08-22 19:49:25.089 +04 [34245] FATAL:  role "alexandrprohnitskii" does not exist
+2026-08-22 19:49:41.084 +04 [34271] FATAL:  role "alexandrprohnitskii" does not exist
+2026-08-22 19:49:51.492 +04 [34299] FATAL:  role "alexandrprohnitskii" does not exist
+2026-08-22 19:49:51.733 +04 [34312] FATAL:  role "alexandrprohnitskii" does not exist
+2026-08-22 19:49:53.575 +04 [34323] FATAL:  role "alexandrprohnitskii" does not exist
+2026-08-22 19:50:56.845 +04 [34149] LOG:  checkpoint starting: time
+2026-08-22 19:51:06.274 +04 [34149] LOG:  checkpoint complete: wrote 96 buffers (0.6%); 0 WAL file(s) added, 0 removed, 0 recycled; write=9.426 s, sync=0.002 s, total=9.429 s; sync files=53, longest=0.001 s, average=0.001 s; distance=530 kB, estimate=530 kB; lsn=0/17D76A0, redo lsn=0/17D7668
+2026-08-22 19:59:38.015 +04 [34339] ERROR:  syntax error at or near "clear" at character 1
+2026-08-22 19:59:38.015 +04 [34339] STATEMENT:  clear
+	CREATE TABLE students (
+	    user_id BIGINT PRIMARY KEY,
+	    CONSTRAINT fk_students_user
+	        FOREIGN KEY (user_id)
+	        REFERENCES users(id)
+	);
+2026-08-22 20:00:56.258 +04 [34149] LOG:  checkpoint starting: time
+2026-08-22 20:01:01.051 +04 [34149] LOG:  checkpoint complete: wrote 48 buffers (0.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=4.783 s, sync=0.004 s, total=4.793 s; sync files=36, longest=0.001 s, average=0.001 s; distance=161 kB, estimate=493 kB; lsn=0/17FFD60, redo lsn=0/17FFD28
+2026-08-22 20:01:01.574 +04 [34339] ERROR:  insert or update on table "students" violates foreign key constraint "fk_students_user"
+2026-08-22 20:01:01.574 +04 [34339] DETAIL:  Key (user_id)=(999) is not present in table "users".
+2026-08-22 20:01:01.574 +04 [34339] STATEMENT:  INSERT INTO students (user_id)
+	VALUES (999);
+2026-08-22 20:05:56.090 +04 [34149] LOG:  checkpoint starting: time
+2026-08-22 20:05:56.297 +04 [34149] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.204 s, sync=0.001 s, total=0.208 s; sync files=3, longest=0.001 s, average=0.001 s; distance=0 kB, estimate=444 kB; lsn=0/17FFF90, redo lsn=0/17FFF58
+2026-08-22 20:06:30.070 +04 [34339] ERROR:  syntax error at or near "postgres" at character 1
+2026-08-22 20:06:30.070 +04 [34339] STATEMENT:  postgres-# VALUES (999);
+2026-08-22 20:10:56.291 +04 [34149] LOG:  checkpoint starting: time
+2026-08-22 20:10:59.747 +04 [34149] LOG:  checkpoint complete: wrote 35 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=3.451 s, sync=0.003 s, total=3.456 s; sync files=31, longest=0.001 s, average=0.001 s; distance=149 kB, estimate=414 kB; lsn=0/1825430, redo lsn=0/18253F8
+2026-08-23 17:17:48.705 +04 [34148] LOG:  received fast shutdown request
+2026-08-23 17:17:48.706 +04 [34148] LOG:  aborting any active transactions
+2026-08-23 17:17:48.707 +04 [34339] FATAL:  terminating connection due to administrator command
+2026-08-23 17:17:48.710 +04 [34148] LOG:  background worker "logical replication launcher" (PID 34154) exited with exit code 1
+2026-08-23 17:17:48.712 +04 [34149] LOG:  shutting down
+2026-08-23 17:17:48.712 +04 [34149] LOG:  checkpoint starting: shutdown immediate
+2026-08-23 17:17:48.717 +04 [34149] LOG:  checkpoint complete: wrote 0 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.006 s; sync files=0, longest=0.000 s, average=0.000 s; distance=0 kB, estimate=373 kB; lsn=0/18254E0, redo lsn=0/18254E0
+2026-08-23 17:17:48.724 +04 [34148] LOG:  database system is shut down
+2026-08-23 23:49:23.024 +04 [42582] LOG:  starting PostgreSQL 16.15 (Postgres.app) on aarch64-apple-darwin21.6.0, compiled by Apple clang version 14.0.0 (clang-1400.0.29.102), 64-bit
+2026-08-23 23:49:23.026 +04 [42582] LOG:  listening on IPv6 address "::1", port 5432
+2026-08-23 23:49:23.026 +04 [42582] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-08-23 23:49:23.027 +04 [42582] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2026-08-23 23:49:23.031 +04 [42585] LOG:  database system was shut down at 2026-08-23 17:17:48 +04
+2026-08-23 23:49:23.039 +04 [42582] LOG:  database system is ready to accept connections
+2026-08-23 23:49:23.191 +04 [42589] FATAL:  role "alexandrprohnitskii" does not exist
+2026-08-23 23:54:23.018 +04 [42583] LOG:  checkpoint starting: time
+2026-08-23 23:54:23.028 +04 [42583] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.003 s, sync=0.001 s, total=0.011 s; sync files=2, longest=0.001 s, average=0.001 s; distance=0 kB, estimate=0 kB; lsn=0/18255C8, redo lsn=0/1825590
+2026-08-24 00:03:53.915 +04 [43184] FATAL:  role "alexandrprohnitskii" does not exist
+2026-08-24 00:47:42.353 +04 [42582] LOG:  received fast shutdown request
+2026-08-24 00:47:42.355 +04 [42582] LOG:  aborting any active transactions
+2026-08-24 00:47:42.357 +04 [42582] LOG:  background worker "logical replication launcher" (PID 42588) exited with exit code 1
+2026-08-24 00:47:42.358 +04 [42583] LOG:  shutting down
+2026-08-24 00:47:42.358 +04 [42583] LOG:  checkpoint starting: shutdown immediate
+2026-08-24 00:47:42.363 +04 [42583] LOG:  checkpoint complete: wrote 0 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.001 s, total=0.006 s; sync files=0, longest=0.000 s, average=0.000 s; distance=0 kB, estimate=0 kB; lsn=0/1825678, redo lsn=0/1825678
+2026-08-24 00:47:42.369 +04 [42582] LOG:  database system is shut down
+2026-08-24 01:29:24.071 +04 [58016] LOG:  starting PostgreSQL 16.15 (Postgres.app) on aarch64-apple-darwin21.6.0, compiled by Apple clang version 14.0.0 (clang-1400.0.29.102), 64-bit
+2026-08-24 01:29:24.073 +04 [58016] LOG:  listening on IPv6 address "::1", port 5432
+2026-08-24 01:29:24.073 +04 [58016] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-08-24 01:29:24.073 +04 [58016] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2026-08-24 01:29:24.078 +04 [58020] LOG:  database system was shut down at 2026-08-24 00:47:42 +04
+2026-08-24 01:29:24.087 +04 [58016] LOG:  database system is ready to accept connections
+2026-08-24 01:30:00.086 +04 [58086] FATAL:  role "alexandrprohnitskii" does not exist
+2026-08-24 01:33:27.887 +04 [58176] FATAL:  database "study_school" does not exist
+2026-08-24 01:34:24.075 +04 [58018] LOG:  checkpoint starting: time
+2026-08-24 01:34:24.079 +04 [58018] LOG:  checkpoint complete: wrote 3 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.001 s, total=0.004 s; sync files=2, longest=0.001 s, average=0.001 s; distance=0 kB, estimate=0 kB; lsn=0/1825760, redo lsn=0/1825728
+2026-08-24 01:38:16.980 +04 [58330] FATAL:  role "alexandrprohnitskii" does not exist
+2026-08-24 01:39:24.077 +04 [58018] LOG:  checkpoint starting: time
+2026-08-24 01:41:01.016 +04 [58018] LOG:  checkpoint complete: wrote 954 buffers (5.8%); 1 WAL file(s) added, 0 removed, 0 recycled; write=96.815 s, sync=0.018 s, total=96.939 s; sync files=310, longest=0.001 s, average=0.001 s; distance=4395 kB, estimate=4395 kB; lsn=0/1C70648, redo lsn=0/1C70610
+2026-08-24 01:41:22.705 +04 [58428] FATAL:  role "alexandrprohnitskii" does not exist
+2026-08-24 01:48:53.815 +04 [58016] LOG:  received fast shutdown request
+2026-08-24 01:48:53.816 +04 [58016] LOG:  aborting any active transactions
+2026-08-24 01:48:53.816 +04 [58296] FATAL:  terminating connection due to administrator command
+2026-08-24 01:48:53.819 +04 [58016] LOG:  background worker "logical replication launcher" (PID 58023) exited with exit code 1
+2026-08-24 01:48:53.821 +04 [58018] LOG:  shutting down
+2026-08-24 01:48:53.821 +04 [58018] LOG:  checkpoint starting: shutdown immediate
+2026-08-24 01:48:53.828 +04 [58018] LOG:  checkpoint complete: wrote 17 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.004 s, sync=0.001 s, total=0.007 s; sync files=13, longest=0.001 s, average=0.001 s; distance=35 kB, estimate=3959 kB; lsn=0/1C79368, redo lsn=0/1C79368
+2026-08-24 01:48:53.833 +04 [58016] LOG:  database system is shut down
+2026-08-24 13:53:32.641 +04 [63377] LOG:  starting PostgreSQL 16.15 (Postgres.app) on aarch64-apple-darwin21.6.0, compiled by Apple clang version 14.0.0 (clang-1400.0.29.102), 64-bit
+2026-08-24 13:53:32.643 +04 [63377] LOG:  listening on IPv6 address "::1", port 5432
+2026-08-24 13:53:32.643 +04 [63377] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2026-08-24 13:53:32.643 +04 [63377] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2026-08-24 13:53:32.648 +04 [63380] LOG:  database system was shut down at 2026-08-24 01:48:53 +04
+2026-08-24 13:53:32.657 +04 [63377] LOG:  database system is ready to accept connections
+2026-08-24 13:53:32.810 +04 [63384] FATAL:  role "alexandrprohnitskii" does not exist
+2026-08-24 13:53:39.049 +04 [63408] FATAL:  role "alexandrprohnitskii" does not exist
+2026-08-24 13:53:43.840 +04 [63426] FATAL:  role "alexandrprohnitskii" does not exist
+2026-08-24 13:53:44.105 +04 [63439] FATAL:  role "alexandrprohnitskii" does not exist
+2026-08-24 13:58:32.640 +04 [63378] LOG:  checkpoint starting: time
+2026-08-24 13:58:32.857 +04 [63378] LOG:  checkpoint complete: wrote 5 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.206 s, sync=0.002 s, total=0.217 s; sync files=3, longest=0.001 s, average=0.001 s; distance=16 kB, estimate=16 kB; lsn=0/1C7D4A0, redo lsn=0/1C7D468
+2026-08-24 14:43:32.836 +04 [63378] LOG:  checkpoint starting: time
+2026-08-24 14:43:33.048 +04 [63378] LOG:  checkpoint complete: wrote 2 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.205 s, sync=0.001 s, total=0.212 s; sync files=2, longest=0.001 s, average=0.001 s; distance=6 kB, estimate=15 kB; lsn=0/1C7EEA8, redo lsn=0/1C7EE70
+2026-08-24 14:48:18.766 +04 [63377] LOG:  received fast shutdown request
+2026-08-24 14:48:18.766 +04 [63377] LOG:  aborting any active transactions
+2026-08-24 14:48:18.769 +04 [63377] LOG:  background worker "logical replication launcher" (PID 63383) exited with exit code 1
+2026-08-24 14:48:18.769 +04 [63378] LOG:  shutting down
+2026-08-24 14:48:18.769 +04 [63378] LOG:  checkpoint starting: shutdown immediate
+2026-08-24 14:48:18.775 +04 [63378] LOG:  checkpoint complete: wrote 9 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.003 s, sync=0.001 s, total=0.007 s; sync files=8, longest=0.001 s, average=0.001 s; distance=6 kB, estimate=14 kB; lsn=0/1C807B8, redo lsn=0/1C807B8
+2026-08-24 14:48:18.781 +04 [63377] LOG:  database system is shut down
