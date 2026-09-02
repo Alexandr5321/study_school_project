@@ -1,0 +1,11 @@
+services:
+  rsyslog:
+    build: ./rsyslog
+    ports:
+      - "514:514/udp"
+    volumes:
+      - rsyslog_logs:/var/log
+
+volumes:
+  rsyslog_logs:
+
