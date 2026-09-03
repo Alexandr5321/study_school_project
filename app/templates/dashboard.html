@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-section">
+    <div class="container">
+
+        <div class="dashboard-header">
+            <h1>Личный кабинет</h1>
+            <p>Добро пожаловать, {{ user.first_name }}!</p>
+        </div>
+
+        <div class="dashboard-card">
+
+            <h2>Мои уроки</h2>
+
+            <div id="my-lessons"></div>
+
+            <button id="logout-btn" class="secondary-btn">
+                Выйти
+            </button>
+
+        </div>
+
+    </div>
+</section>
+
+<script>
+async function loadMyLessons() {
+    const response = await fetch("/my-lessons");
+    const data = await response.json();
+
+    const lessonsContainer = document.getElementById("my-lessons");
+
+    if (data.lessons.length === 0) {
+        lessonsContainer.innerHTML =
+            "<p>Ты пока не записан ни на один урок.</p>";
+        return;
+    }
+
+    data.lessons.forEach(function(lesson) {
+
+        const lessonCard = document.createElement("div");
+
+        lessonCard.className = "my-lesson-card";
+
+        lessonCard.innerHTML = `
+            <h3>${lesson.title}</h3>
+
+            <p>${lesson.description || ""}</p>
+
+            <div class="lesson-date">
+                ${lesson.start_at}
+            </div>
+
+            <a
+                href="${lesson.zoom_link}"
+                class="primary-btn"
+                target="_blank"
+            >
+                Перейти к уроку →
+            </a>
+        `;
+
+        lessonsContainer.appendChild(lessonCard);
+    });
+}
+
+loadMyLessons();
+
+
+document
+    .getElementById("logout-btn")
+    .addEventListener("click", async function() {
+
+        const response = await fetch("/logout", {
+            method: "POST"
+        });
+
+        if (response.ok) {
+            window.location.href = "/login";
+        }
+    });
+</script>
+
+{% endblock %}

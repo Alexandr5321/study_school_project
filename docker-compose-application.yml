@@ -17,7 +17,7 @@ services:
        POSTGRES_USER: postgres
        POSTGRES_PASSWORD: postgres
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - study_school_project_postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d study_school"]
       interval: 5s
@@ -39,4 +39,5 @@ services:
 
 
 volumes: 
-  postgres_data: 
+  study_school_project_postgres_data:
+    external: true

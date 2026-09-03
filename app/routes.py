@@ -1,6 +1,4 @@
-from functools import wraps
-
-from flask import Blueprint, jsonify, request, session
+from flask import Blueprint, jsonify, request, session, render_template, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from app.db import get_db
@@ -9,73 +7,9 @@ from app.db import get_db
 bp = Blueprint("main", __name__)
 
 
-def get_user_role(user_id):
-    conn = get_db()
-
-    with conn.cursor() as cur:
-        cur.execute(
-            """
-            SELECT
-                EXISTS (
-                    SELECT 1
-                    FROM students
-                    WHERE user_id = %s
-                ) AS is_student,
-                EXISTS (
-                    SELECT 1
-                    FROM teachers
-                    WHERE user_id = %s
-                ) AS is_teacher;
-            """,
-            (user_id, user_id),
-        )
-
-        result = cur.fetchone()
-
-    if result["is_student"]:
-        return "student"
-
-    if result["is_teacher"]:
-        return "teacher"
-
-    return None
-
-
-def student_required(view):
-    @wraps(view)
-    def wrapped(*args, **kwargs):
-        user_id = session.get("user_id")
-
-        if user_id is None:
-            return jsonify(error="Authentication required"), 401
-
-        if get_user_role(user_id) != "student":
-            return jsonify(error="Student access required"), 403
-
-        return view(*args, **kwargs)
-
-    return wrapped
-
-
-def teacher_required(view):
-    @wraps(view)
-    def wrapped(*args, **kwargs):
-        user_id = session.get("user_id")
-
-        if user_id is None:
-            return jsonify(error="Authentication required"), 401
-
-        if get_user_role(user_id) != "teacher":
-            return jsonify(error="Teacher access required"), 403
-
-        return view(*args, **kwargs)
-
-    return wrapped
-
-
 @bp.get("/")
 def index():
-    return jsonify(status="ok")
+    return render_template("index.html")
 
 
 @bp.get("/health/db")
@@ -89,6 +23,11 @@ def health_db():
     return jsonify(database=row["ok"] == 1)
 
 
+@bp.get("/register")
+def register_page():
+    return render_template("register.html")
+
+
 @bp.post("/register")
 def register():
     data = request.get_json()
@@ -97,13 +36,11 @@ def register():
     password = data.get("password")
     first_name = data.get("first_name")
     last_name = data.get("last_name")
-    role = data.get("role")
 
-    if not email or not password or not first_name or not role:
-        return jsonify(error="Missing required fields"), 400
-
-    if role not in ("student", "teacher"):
-        return jsonify(error="Invalid role"), 400
+    if not email or not password or not first_name:
+        return jsonify(
+            error="Email, password and first name are required"
+        ), 400
 
     password_hash = generate_password_hash(password)
 
@@ -131,36 +68,24 @@ def register():
             )
 
             user = cur.fetchone()
-            user_id = user["id"]
-
-            if role == "student":
-                cur.execute(
-                    """
-                    INSERT INTO students (user_id)
-                    VALUES (%s);
-                    """,
-                    (user_id,),
-                )
-            else:
-                cur.execute(
-                    """
-                    INSERT INTO teachers (user_id)
-                    VALUES (%s);
-                    """,
-                    (user_id,),
-                )
 
         conn.commit()
 
-    except Exception:
+    except Exception as e:
         conn.rollback()
-        return jsonify(error="Registration failed"), 400
+        return jsonify(error=str(e)), 400
+
+    session["user_id"] = user["id"]
 
     return jsonify(
-        message="User registered",
-        user_id=user_id,
-        role=role,
+        message="Registration successful",
+        user_id=user["id"],
     ), 201
+
+
+@bp.get("/login")
+def login_page():
+    return render_template("login.html")
 
 
 @bp.post("/login")
@@ -171,7 +96,9 @@ def login():
     password = data.get("password")
 
     if not email or not password:
-        return jsonify(error="Email and password are required"), 400
+        return jsonify(
+            error="Email and password are required"
+        ), 400
 
     conn = get_db()
 
@@ -189,10 +116,14 @@ def login():
         user = cur.fetchone()
 
     if user is None:
-        return jsonify(error="Invalid email or password"), 401
+        return jsonify(
+            error="Invalid email or password"
+        ), 401
 
     if not check_password_hash(user["password_hash"], password):
-        return jsonify(error="Invalid email or password"), 401
+        return jsonify(
+            error="Invalid email or password"
+        ), 401
 
     session["user_id"] = user["id"]
 
@@ -228,16 +159,9 @@ def get_session():
         session.clear()
         return jsonify(authenticated=False), 401
 
-    role = get_user_role(user["id"])
-
-    if role is None:
-        session.clear()
-        return jsonify(error="User has no valid role"), 403
-
     return jsonify(
         authenticated=True,
         user=user,
-        role=role,
     )
 
 
@@ -250,17 +174,158 @@ def logout():
     )
 
 
-@bp.get("/student/test")
-@student_required
-def student_test():
-    return jsonify(
-        message="Hello student"
+@bp.get("/dashboard")
+def dashboard():
+    user_id = session.get("user_id")
+
+    if user_id is None:
+        return redirect("/login")
+
+    conn = get_db()
+
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT id, email, first_name, last_name
+            FROM users
+            WHERE id = %s
+              AND is_active = TRUE;
+            """,
+            (user_id,),
+        )
+
+        user = cur.fetchone()
+
+    if user is None:
+        session.clear()
+        return redirect("/login")
+
+    return render_template(
+        "dashboard.html",
+        user=user,
     )
 
 
-@bp.get("/teacher/test")
-@teacher_required
-def teacher_test():
+@bp.get("/lessons")
+def lessons_page():
+    return render_template("lessons.html")
+
+
+@bp.get("/api/lessons")
+def lessons_api():
+    user_id = session.get("user_id")
+
+    conn = get_db()
+
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT
+                lessons.id,
+                lessons.title,
+                lessons.description,
+                lessons.start_at,
+                lessons.zoom_link,
+                CASE
+                    WHEN lesson_enrollments.id IS NOT NULL
+                    THEN TRUE
+                    ELSE FALSE
+                END AS enrolled
+            FROM lessons
+            LEFT JOIN lesson_enrollments
+                ON lessons.id = lesson_enrollments.lesson_id
+                AND lesson_enrollments.user_id = %s
+            ORDER BY lessons.start_at;
+            """,
+            (user_id,),
+        )
+
+        lessons = cur.fetchall()
+
+    for lesson in lessons:
+        lesson["start_at"] = lesson["start_at"].strftime(
+            "%d.%m.%Y %H:%M"
+        )
+
+    return jsonify(lessons=lessons)
+
+
+@bp.post("/lessons/<int:lesson_id>/enroll")
+def enroll_lesson(lesson_id):
+    user_id = session.get("user_id")
+
+    if user_id is None:
+        return jsonify(error="Authentication required"), 401
+
+    conn = get_db()
+
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                INSERT INTO lesson_enrollments (
+                    user_id,
+                    lesson_id
+                )
+                VALUES (%s, %s)
+                ON CONFLICT (user_id, lesson_id)
+                DO NOTHING
+                RETURNING id;
+                """,
+                (user_id, lesson_id),
+            )
+
+            enrollment = cur.fetchone()
+
+        conn.commit()
+
+    except Exception as e:
+        conn.rollback()
+        return jsonify(error=str(e)), 400
+
+    if enrollment is None:
+        return jsonify(
+            message="Already enrolled"
+        )
+
     return jsonify(
-        message="Hello teacher"
-    )
+        message="Successfully enrolled",
+        enrollment_id=enrollment["id"],
+    ), 201
+
+
+@bp.get("/my-lessons")
+def my_lessons():
+    user_id = session.get("user_id")
+
+    if user_id is None:
+        return redirect("/login")
+
+    conn = get_db()
+
+    with conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT
+                lessons.id,
+                lessons.title,
+                lessons.description,
+                lessons.start_at,
+                lessons.zoom_link
+            FROM lessons
+            JOIN lesson_enrollments
+                ON lessons.id = lesson_enrollments.lesson_id
+            WHERE lesson_enrollments.user_id = %s
+            ORDER BY lessons.start_at;
+            """,
+            (user_id,),
+        )
+
+        lessons = cur.fetchall()
+
+    for lesson in lessons:
+        lesson["start_at"] = lesson["start_at"].strftime(
+            "%d.%m.%Y %H:%M"
+        )
+
+    return jsonify(lessons=lessons)

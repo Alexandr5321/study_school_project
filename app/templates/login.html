@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+
+    <div class="auth-card">
+
+        <h1>С возвращением</h1>
+
+        <p class="auth-subtitle">
+            Войди в свой аккаунт и продолжи обучение
+        </p>
+
+        <form id="login-form">
+
+            <label for="email">
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="you@example.com"
+                required
+            >
+
+            <label for="password">
+                Пароль
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Введите пароль"
+                required
+            >
+
+            <button
+                type="submit"
+                class="primary-btn"
+            >
+                Войти
+            </button>
+
+        </form>
+
+        <p id="login-message"></p>
+
+        <p class="auth-link">
+            Нет аккаунта?
+            <a href="/register">
+                Зарегистрироваться
+            </a>
+        </p>
+
+    </div>
+
+</section>
+
+<script>
+document
+    .getElementById("login-form")
+    .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const email =
+            document.getElementById("email").value;
+
+        const password =
+            document.getElementById("password").value;
+
+        const message =
+            document.getElementById("login-message");
+
+        const response = await fetch("/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            window.location.href = "/dashboard";
+        } else {
+            message.textContent =
+                data.error || "Ошибка входа";
+        }
+    });
+</script>
+
+{% endblock %}

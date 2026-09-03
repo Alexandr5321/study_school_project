@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}Study Hebrew{% endblock %}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="container nav-content">
+
+        <a href="/" class="logo">
+            עברית<span> בדרך</span>
+        </a>
+
+        <nav>
+
+            <a href="/">
+                Главная
+            </a>
+
+            <a href="/lessons">
+                Уроки
+            </a>
+
+            <a href="#">
+                О нас
+            </a>
+
+            {% if session.get("user_id") %}
+
+                <a href="/dashboard">
+                    Личный кабинет
+                </a>
+
+                <button
+                    id="nav-logout-btn"
+                    class="nav-logout-btn"
+                >
+                    Выйти
+                </button>
+
+            {% endif %}
+
+        </nav>
+
+        {% if session.get("user_id") %}
+
+            <a
+                href="/dashboard"
+                class="login-btn"
+            >
+                Личный кабинет
+            </a>
+
+        {% else %}
+
+            <a
+                href="/login"
+                class="login-btn"
+            >
+                Войти
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</header>
+
+<main>
+
+    {% block content %}{% endblock %}
+
+</main>
+
+<footer>
+
+    <div class="container">
+
+        <p>
+            © 2026 Hebrew Study
+        </p>
+
+    </div>
+
+</footer>
+
+
+{% if session.get("user_id") %}
+
+<script>
+document
+    .getElementById("nav-logout-btn")
+    .addEventListener("click", async function() {
+
+        const response = await fetch("/logout", {
+            method: "POST"
+        });
+
+        if (response.ok) {
+            window.location.href = "/";
+        }
+    });
+</script>
+
+{% endif %}
+
+</body>
+
+</html>

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Уроки{% endblock %}
+
+{% block content %}
+
+<section class="lessons-section">
+    <div class="container">
+
+        <div class="section-title">
+            <h1>Уроки</h1>
+            <p>Выбирай урок и записывайся на обучение.</p>
+        </div>
+
+        <div id="lessons-list"></div>
+
+    </div>
+</section>
+
+<script>
+async function loadLessons() {
+    const response = await fetch("/api/lessons");
+    const data = await response.json();
+
+    const lessonsList = document.getElementById("lessons-list");
+
+    if (data.lessons.length === 0) {
+        lessonsList.innerHTML = "<p>Пока уроков нет.</p>";
+        return;
+    }
+
+    data.lessons.forEach(function(lesson) {
+
+        const card = document.createElement("div");
+
+        card.className = "lesson-card";
+
+        const buttonText = lesson.enrolled
+            ? "Вы записаны"
+            : "Записаться на урок";
+
+        const buttonDisabled = lesson.enrolled
+            ? "disabled"
+            : "";
+
+        card.innerHTML = `
+            <h2>${lesson.title}</h2>
+
+            <p>${lesson.description || ""}</p>
+
+            <div class="lesson-date">
+                ${lesson.start_at}
+            </div>
+
+            <button
+                class="primary-btn enroll-btn"
+                data-lesson-id="${lesson.id}"
+                ${buttonDisabled}
+            >
+                ${buttonText}
+            </button>
+        `;
+
+        lessonsList.appendChild(card);
+    });
+
+    document
+        .querySelectorAll(".enroll-btn")
+        .forEach(function(button) {
+
+            button.addEventListener("click", async function() {
+
+                const lessonId = button.dataset.lessonId;
+
+                const response = await fetch(
+                    `/lessons/${lessonId}/enroll`,
+                    {
+                        method: "POST"
+                    }
+                );
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    button.textContent = "Вы записаны";
+                    button.disabled = true;
+                } else {
+                    alert(data.error || "Ошибка записи на урок");
+                }
+            });
+        });
+}
+
+loadLessons();
+</script>
+
+{% endblock %}

@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+
+    <div class="auth-card">
+
+        <h1>Создай аккаунт</h1>
+
+        <p class="auth-subtitle">
+            Зарегистрируйся и начни изучать иврит
+        </p>
+
+        <form id="register-form">
+
+            <label for="first_name">
+                Имя
+            </label>
+
+            <input
+                type="text"
+                id="first_name"
+                name="first_name"
+                placeholder="Твоё имя"
+                required
+            >
+
+            <label for="last_name">
+                Фамилия
+            </label>
+
+            <input
+                type="text"
+                id="last_name"
+                name="last_name"
+                placeholder="Твоя фамилия"
+            >
+
+            <label for="email">
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="you@example.com"
+                required
+            >
+
+            <label for="password">
+                Пароль
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Придумай пароль"
+                required
+            >
+
+            <button
+                type="submit"
+                class="primary-btn"
+            >
+                Зарегистрироваться
+            </button>
+
+        </form>
+
+        <p id="register-message"></p>
+
+        <p class="auth-link">
+            Уже есть аккаунт?
+            <a href="/login">
+                Войти
+            </a>
+        </p>
+
+    </div>
+
+</section>
+
+<script>
+document
+    .getElementById("register-form")
+    .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const firstName =
+            document.getElementById("first_name").value;
+
+        const lastName =
+            document.getElementById("last_name").value;
+
+        const email =
+            document.getElementById("email").value;
+
+        const password =
+            document.getElementById("password").value;
+
+        const message =
+            document.getElementById("register-message");
+
+        const response = await fetch("/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                first_name: firstName,
+                last_name: lastName,
+                email: email,
+                password: password
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+
+            window.location.href = "/dashboard";
+
+        } else {
+
+            message.textContent =
+                data.error || "Ошибка регистрации";
+        }
+    });
+</script>
+
+{% endblock %}
