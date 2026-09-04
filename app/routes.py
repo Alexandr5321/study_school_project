@@ -12,6 +12,11 @@ def index():
     return render_template("index.html")
 
 
+@bp.get("/about")
+def about_page():
+    return render_template("about.html")
+
+
 @bp.get("/health/db")
 def health_db():
     conn = get_db()
