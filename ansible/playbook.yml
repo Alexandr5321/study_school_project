@@ -1,0 +1,32 @@
+- name: Configuration files
+  hosts: webservers
+  become: true
+
+  tasks:
+    - name: Install Git
+      ansible.builtin.apt:
+        name:
+          - git
+        state: present
+        update_cache: true
+
+    - name: Install Docker
+      ansible.builtin.apt:
+        name:
+          - docker.io
+          - docker-compose-v2
+        state: present
+        update_cache: true
+    
+    - name: Status Docker
+      ansible.builtin.systemd_service:
+        name: docker
+        state: started
+        enabled: true
+    
+    - name: Create workdir
+      ansible.builtin.file:
+        path: /opt/hebrew-study-school
+        state: directory
+        owner: wrag
+        group: wrag              
