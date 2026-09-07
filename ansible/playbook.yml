@@ -1,20 +1,15 @@
+---
 - name: Configuration files
   hosts: webservers
   become: true
 
   tasks:
-    - name: Install Git
-      ansible.builtin.apt:
-        name:
-          - git
-        state: present
-        update_cache: true
-
-    - name: Install Docker
+    - name: Install Required Tools
       ansible.builtin.apt:
         name:
           - docker.io
           - docker-compose-v2
+          - git
         state: present
         update_cache: true
     
@@ -29,4 +24,14 @@
         path: /opt/hebrew-study-school
         state: directory
         owner: wrag
-        group: wrag              
+        group: wrag 
+    
+    - name: Automate Git Pull
+      ansible.builtin.git:
+        repo: https://github.com/Alexandr5321/study_school_project.git
+        dest: /opt/hebrew-study-school
+
+    - name: Deploy application
+      ansible.builtin.command:
+        cmd: docker compose -f docker-compose-application.yml -p application up -d --build
+        chdir: /opt/hebrew-study-school
