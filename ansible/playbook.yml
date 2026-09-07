@@ -28,12 +28,20 @@
         group: wrag 
     
     - name: Automate Git Pull
-  ansible.builtin.git:
-    repo: git@github.com:Alexandr5321/study_school_project.git
-    dest: /opt/hebrew-study-school
-    key_file: /home/wrag/.ssh/hebrew_study_school_ed25519
-    update: true
-
+      ansible.builtin.git:
+        repo: git@github.com:Alexandr5321/study_school_project.git
+        dest: /opt/hebrew-study-school
+        key_file: /home/wrag/.ssh/hebrew_study_school_ed25519
+        update: true
+    - name: Generate self-signed SSL certificate
+      ansible.builtin.command:
+        cmd: >
+          openssl req -x509 -nodes -days 365
+          -newkey rsa:2048
+          -keyout /opt/hebrew-study-school/nginx/ssl/server.key
+          -out /opt/hebrew-study-school/nginx/ssl/server.cert
+          -subj "/CN=localhost"
+        creates: /opt/hebrew-study-school/nginx/ssl/server.cert
     - name: Deploy application
       ansible.builtin.command:
         cmd: docker compose -f docker-compose-application.yml -p application up -d --build
