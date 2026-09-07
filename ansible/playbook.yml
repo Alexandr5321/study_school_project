@@ -28,9 +28,11 @@
         group: wrag 
     
     - name: Automate Git Pull
-      ansible.builtin.git:
-        repo: git@github.com:Alexandr5321/study_school_project.git
-        key_file: /home/wrag/.ssh/hebrew_study_school_ed25519
+  ansible.builtin.git:
+    repo: git@github.com:Alexandr5321/study_school_project.git
+    dest: /opt/hebrew-study-school
+    key_file: /home/wrag/.ssh/hebrew_study_school_ed25519
+    update: true
 
     - name: Deploy application
       ansible.builtin.command:
