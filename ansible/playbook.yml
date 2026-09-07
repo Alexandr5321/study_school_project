@@ -11,6 +11,7 @@
           - docker-compose-v2
           - git
           - ufw
+          - openssl
         state: present
         update_cache: true
     
@@ -33,6 +34,7 @@
         dest: /opt/hebrew-study-school
         key_file: /home/wrag/.ssh/hebrew_study_school_ed25519
         update: true
+
     - name: Generate self-signed SSL certificate
       ansible.builtin.command:
         cmd: >
@@ -42,6 +44,7 @@
           -out /opt/hebrew-study-school/nginx/ssl/server.cert
           -subj "/CN=localhost"
         creates: /opt/hebrew-study-school/nginx/ssl/server.cert
+
     - name: Deploy application
       ansible.builtin.command:
         cmd: docker compose -f docker-compose-application.yml -p application up -d --build
