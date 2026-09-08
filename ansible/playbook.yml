@@ -3,6 +3,9 @@
   hosts: webservers
   become: true
 
+  vars_files:
+    - secrets.yml
+
   tasks:
     - name: Install Required Tools
       ansible.builtin.apt:
