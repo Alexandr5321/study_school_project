@@ -30,6 +30,9 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
+      - name: Set test environment
+        run: echo "SECRET_KEY=test-secret-key" >> "$GITHUB_ENV"
+
       - name: Run tests
         run: pytest
 
