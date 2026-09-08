@@ -33,6 +33,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/ssl:/etc/nginx/ssl:ro
     networks:
+      - default
       - logging_network
     depends_on:
       flask:
