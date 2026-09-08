@@ -72,13 +72,9 @@
       community.general.ufw:
         rule: allow
         port: "22"
-        src: "192.168.64.1"
+        src: "192.168.100.6"
         proto: tcp
 
-    - name: Set UFW defaults
-      community.general.ufw:
-        direction: incoming
-        policy: deny
 
     - name: Allow outgoing traffic
       community.general.ufw:
@@ -88,8 +84,3 @@
     - name: Enable UFW
       community.general.ufw:
         state: enabled
-
-    - name: Deny Traffic
-      community.general.ufw:
-        direction: routed
-        policy: deny
