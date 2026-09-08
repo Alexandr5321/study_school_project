@@ -5,7 +5,12 @@ services:
       - "514:514/udp"
     volumes:
       - rsyslog_logs:/var/log
+    networks:
+      - logging_network
 
 volumes:
   rsyslog_logs:
 
+networks:
+  logging_network:
+    external: true

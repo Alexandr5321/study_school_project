@@ -13,9 +13,9 @@ services:
   postgres:
     image: postgres:16
     environment:
-       POSTGRES_DB: study_school
-       POSTGRES_USER: postgres
-       POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: study_school
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - study_school_project_postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -23,7 +23,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-  
+
   nginx:
     image: nginx:alpine
     ports:
@@ -32,12 +32,16 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/ssl:/etc/nginx/ssl:ro
-
+    networks:
+      - logging_network
     depends_on:
       flask:
-        condition: service_started 
+        condition: service_started
 
-
-volumes: 
+volumes:
   study_school_project_postgres_data:
+    external: true
+
+networks:
+  logging_network:
     external: true
