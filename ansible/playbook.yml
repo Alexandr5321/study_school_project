@@ -57,6 +57,16 @@
       ansible.builtin.command:
         cmd: docker compose -f docker-compose-application.yml -p application up -d --build
         chdir: /opt/hebrew-study-school
+    
+    - name: Deploy monitoring
+      ansible.builtin.command:
+        cmd: docker compose -f docker-compose-monitoring.yml -p monitoring up -d
+        chdir: /opt/hebrew-study-school
+
+    - name: Deploy logging
+      ansible.builtin.command:
+        cmd: docker compose -f docker-compose-logging.yml -p logging up -d --build
+        chdir: /opt/hebrew-study-school
 
     - name: Allow SSH
       community.general.ufw:
