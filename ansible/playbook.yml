@@ -48,7 +48,7 @@
           -subj "/CN=localhost"
         creates: /opt/hebrew-study-school/nginx/ssl/server.cert
 
-     - name: Create logging network
+    - name: Create logging network
       community.docker.docker_network:
         name: logging_network
         state: present
