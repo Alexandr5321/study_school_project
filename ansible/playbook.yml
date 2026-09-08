@@ -48,6 +48,11 @@
           -subj "/CN=localhost"
         creates: /opt/hebrew-study-school/nginx/ssl/server.cert
 
+     - name: Create logging network
+      community.docker.docker_network:
+        name: logging_network
+        state: present
+
     - name: Deploy application
       ansible.builtin.command:
         cmd: docker compose -f docker-compose-application.yml -p application up -d --build
