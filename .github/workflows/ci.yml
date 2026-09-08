@@ -34,6 +34,8 @@ jobs:
         run: echo "SECRET_KEY=test-secret-key" >> "$GITHUB_ENV"
 
       - name: Run tests
+        env:
+          PYTHONPATH: .
         run: pytest
 
   docker:
