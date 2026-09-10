@@ -30,7 +30,3 @@ Bashcd ansible
 ansible-playbook -i inventory.ini playbook.yml --ask-become --ask-vault-pass
 ```
 
-#### Полезные команды
-Bashdocker compose ls
-docker compose -p application logs flask
-docker exec logging-rsyslog-1 cat /var/log/remote.log
